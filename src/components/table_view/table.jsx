@@ -29,6 +29,8 @@ import Select from "react-select";
 import deleteItems from "../../actions/deleteItems";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import CancelIcon from "@material-ui/icons/Cancel";
+import Button from "@material-ui/core/Button";
+import { CSVLink } from "react-csv";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -297,7 +299,14 @@ export default function EnhancedTable() {
         <FormControlLabel
           control={
             <>
-              <Select options={selectOptions} isMulti />
+              <CSVLink data={filteredRows} target="_blank">
+                <Button>DOWNLOAD CSV</Button>
+              </CSVLink>
+              <Select
+                options={selectOptions}
+                isMulti
+                onChange={event => console.log(event)}
+              />
               <Switch checked={booleanFilter} onChange={handleBooleanFilter} />
             </>
           }
