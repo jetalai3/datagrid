@@ -27,6 +27,8 @@ import orderByAction from "../../actions/setOrderBy";
 import orderDirectionAction from "../../actions/setOrderDirection";
 import Select from "react-select";
 import deleteItems from "../../actions/deleteItems";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -357,7 +359,11 @@ export default function EnhancedTable() {
                       <TableCell align="right">{row.zipcode}</TableCell>
                       <TableCell align="right">{row.bio}</TableCell>
                       <TableCell align="right">
-                        {row.active ? "+" : "-"}
+                        {row.active ? (
+                          <CheckCircleIcon style={{ color: "#008000" }} />
+                        ) : (
+                          <CancelIcon style={{ color: "#DC143C" }} />
+                        )}
                       </TableCell>
                       <TableCell align="right">{row.weekday}</TableCell>
                     </TableRow>
