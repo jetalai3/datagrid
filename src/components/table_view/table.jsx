@@ -31,6 +31,10 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import CancelIcon from "@material-ui/icons/Cancel";
 import Button from "@material-ui/core/Button";
 import { CSVLink } from "react-csv";
+import filterAction from "../../actions/filterAction";
+import enumFiltering from "../../actions/enumFiltering";
+import TextField from "@material-ui/core/TextField";
+import stringFiltering from "../../actions/stringFiltering";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -202,10 +206,11 @@ EnhancedTableToolbar.propTypes = {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: "100%"
+    margin: "0 auto",
+    width: "70%"
   },
   paper: {
-    width: "100%",
+    width: "70%",
     marginBottom: theme.spacing(2)
   },
   table: {
@@ -239,7 +244,7 @@ export default function EnhancedTable() {
   const orderBy = useSelector(state => state.orderBy);
   const order = useSelector(state => state.orderDirection);
   const selected = useSelector(state => state.selected);
-  const booleanFilter = useSelector(state => state.booleanFilter);
+  const filterObject = useSelector(state => state.filterObject);
   const rows = useSelector(state => {
     return state.initialData;
   });
@@ -279,7 +284,8 @@ export default function EnhancedTable() {
   };
 
   const handleBooleanFilter = event => {
-    dispatch(booleanFiltering(event.target.checked, rows));
+    dispatch(booleanFiltering(event.target.checked));
+    dispatch(filterAction(filterObject, rows));
   };
 
   const isSelected = name => selected.indexOf(name) !== -1;
@@ -299,19 +305,38 @@ export default function EnhancedTable() {
         <FormControlLabel
           control={
             <>
-              <CSVLink data={filteredRows} target="_blank">
-                <Button>DOWNLOAD CSV</Button>
-              </CSVLink>
-              <Select
-                options={selectOptions}
-                isMulti
-                onChange={event => console.log(event)}
+              <Switch
+                checked={filterObject.boolean}
+                onChange={handleBooleanFilter}
               />
-              <Switch checked={booleanFilter} onChange={handleBooleanFilter} />
             </>
           }
           label="Active filter"
         />
+        <TextField
+          id="outlined-basic"
+          label="Search by name, email or address"
+          variant="outlined"
+          onChange={event => {
+            dispatch(stringFiltering(event.target.value));
+            dispatch(filterAction(filterObject, rows));
+          }}
+        />
+        <Select
+          options={selectOptions}
+          autosize={true}
+          isMulti
+          onChange={(event, payload) => {
+            console.log(event);
+            dispatch(enumFiltering(event));
+            dispatch(filterAction(filterObject, rows));
+          }}
+        />
+        <CSVLink data={filteredRows} target="_blank">
+          <Button onClick={() => console.log(filteredRows)}>
+            DOWNLOAD CSV
+          </Button>
+        </CSVLink>
         <TableContainer className={classes.container}>
           <Table
             className={classes.table}

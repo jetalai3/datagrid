@@ -1,7 +1,7 @@
-const booleanFiltering = (booleanValue, array) => {
+const booleanFiltering = booleanValue => {
   return {
     type: "BOOLEAN_FILTERING",
-    payload: {booleanValue, array}
+    payload: booleanValue
   };
 };
 

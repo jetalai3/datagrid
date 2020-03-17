@@ -8,7 +8,7 @@ import { createStore } from "redux";
 import combinedReducer from "./reducers";
 import createUsers from "./util/createUsers";
 
-const initialArray = createUsers(25);
+const initialArray = createUsers(1000);
 const store = createStore(
   combinedReducer,
   {
@@ -16,7 +16,20 @@ const store = createStore(
     filteredData: initialArray,
     selected: [],
     orderBy: "name",
-    orderDirection: "asc"
+    orderDirection: "asc",
+    filterObject: {
+      string: "",
+      boolean: false,
+      weekday: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ]
+    }
   },
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
